@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>daftar mahasiswa</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            input {
+                margin: 5px
+            }
+        </style>
+        <script src="js/jquery-3.4.1.min.js"></script>
+    </head>
+    <body>
+        <div id="body_login" style="text-align: center">
+            silakan daftar disini
+            <br>
+            <br>
+            <div id="form_login" style="margin: auto; background-color: #b1e47e; width: 200px; height: 300px;">
+                <br>
+                <input type="text" id="nim" placeholder="nim">
+                <input type="text" id="nama" placeholder="nama">
+                <input type="text" id="phone" placeholder="nomor hape">
+                <input type="text" id="alamat" placeholder="alamat">
+                <input type="password" id="password" placeholder="password">
+                <button onclick="daftar()">Daftar</button>
+            </div>
+            <div id="daftar">
+                <a href="index.html">sudah punya akun? login disini</a>
+            </div>
+        </div>
+        <script>
+            function daftar() {
+                
+                var nim = document.getElementById("nim").value;
+                var nama = document.getElementById("nama").value;
+                var phone = document.getElementById("phone").value;
+                var alamat = document.getElementById("alamat").value;
+                var password = document.getElementById("password").value;
+                
+                
+                var data_json = new Object();
+                data_json.nim = nim;
+                data_json.nama = nama;
+                data_json.phone = phone;
+                data_json.alamat = alamat;
+                data_json.password = password;
+                data_json.processing_code = '1';
+
+                $.ajax({
+                    contentType: 'application/json',
+                    dataType: "json",
+                    url: "http://103.41.204.105:8080/mahasiswa_server/Online",
+                    data: JSON.stringify(data_json),
+                    type: 'post',
+                    success: function (response) {
+                        if (response.resp_code == 00) {
+                            window.location.href = "index.html";
+                            alert('sukses mendaftarkan nim : '+nim);
+                        } else if(response.resp_code == 02){
+                            alert('duplikat nim : '+nim);
+                        } else if (response.resp_code == 03){
+                            alert('gagal, nim ini '+nim+' bukan mahasiswa 06tplm006');
+                        } else {
+                            alert('gagal daftar');
+                        }
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

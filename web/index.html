@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>login mahasiswa</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            input {
+                margin: 5px
+            }
+        </style>
+        <script src="js/jquery-3.4.1.min.js"></script>
+    </head>
+    <body>
+        <div id="header_text" style="text-align: center">
+            <p>selamat datang di web penilaian akhir mahasiswa<br>
+                silakan login jika sudah punya akun, atau register jika belum punya</p>
+        </div>
+        <br>
+        <br>
+        <div id="body_login" style="text-align: center">
+            silakan masukan nim dan password
+            <br>
+            <br>
+            <div id="form_login" style="margin: auto; background-color: #b1e47e; width: 200px; height: 300px;">
+                <br>
+                <input type="text" id="nim" placeholder="nim">
+                <input type="password" id="password" placeholder="password">
+                <button onclick="login()">Login</button>
+            </div>
+            <div id="daftar">
+                <a href="daftar.html">daftar disini</a>
+            </div>
+        </div>
+        <script>
+            function login() {
+                var nim = document.getElementById("nim").value;
+                var password = document.getElementById("password").value;
+
+                var data_json = new Object();
+                data_json.nim = nim;
+                data_json.password = password;
+                data_json.processing_code = '2';
+
+                $.ajax({
+                    contentType: 'application/json',
+                    dataType: "json",
+                    url: "http://103.41.204.105:8080/mahasiswa_server/Online",
+//                    url: "http://localhost:8080/mahasiswa_server/Online",
+                    data: JSON.stringify(data_json),
+                    type: 'post',
+                    success: function (response) {
+                        if (response.resp_code === '00') {
+                            window.location.href = "welcome.html";
+                            alert('berhasil login dengan nim : ' + nim);
+                        } else if (response.resp_code === '01') {
+                            
+                                alert('nim ' + nim + ' belum terdaftar');
+                            
+                        } else if (response.resp_code === '02') {
+                            
+                                alert('password salah');
+                            
+                        }
+                    }
+                });
+            }
+            ;
+        </script>
+    </body>
+</html>
